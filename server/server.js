@@ -16,7 +16,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://pool-room.vercel.app/',  
+    origin: 'https://pool-room.vercel.app',  
     credentials: true
 }));
 
