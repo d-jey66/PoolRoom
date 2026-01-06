@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcrypt');
-const jwt = require("jsonwebtoken");
-const crypto = require('crypto');
-const { type } = require('os');
+import mongoose from 'mongoose';
+import validator from 'validator';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -20,11 +19,9 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [function() {
-            return !this.oauthid
-        }, "Password is required"],
+        required: [function() { return !this.oauthid }, 'Password is required'],
         minlength: 6,
-        maxLength: 12,
+        maxlength: 12,
         select: false
     },
     role: {
@@ -41,21 +38,17 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    oauthid: {
-        type: String,
-    },
+    oauthid: String,
     oauthProvider: {
         type: String,
         enum: ['google', 'facebook', 'github', null],
         default: null
     },
-    avatar: {
-        type: String
-    }
+    avatar: String
 }, { timestamps: true });
 
 userSchema.pre('save', async function(next) {
-    if (!this.isModified("password")) return next();
+    if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
@@ -71,11 +64,11 @@ userSchema.methods.createEmailVerificationToken = function() {
 }
 
 userSchema.methods.signToken = function() {
-    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN
     });
 };
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User;
