@@ -115,10 +115,17 @@ export const createReservation = async (req, res) => {
         </html>
       `;
 
+      console.log('Attempting to send email to:', userDoc.email);
+      
       sendEmail({
         to: userDoc.email,
         subject: `🎱 Reservation Confirmed - ${user} at Pool Room`,
         html: emailHtml
+      }).then(() => {
+        console.log('Email sent successfully to:', userDoc.email);
+      }).catch(err => {
+        console.error('Email failed:', err);
+        console.error('Email error details:', err.message);
       });
     }
   } catch (error) {
