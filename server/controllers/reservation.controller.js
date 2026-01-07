@@ -1,6 +1,6 @@
 import Reservation from "../models/reservation.model.js";
 import User from "../models/user.model.js";
-import sendEmail from "../utils/email.js";
+// import sendEmail from "../utils/email.js";
 
 
 // create resrvation
@@ -41,83 +41,83 @@ export const createReservation = async (req, res) => {
       end 
     });
 
-    const userDoc = await User.findById(userId);
-    if (userDoc && userDoc.email) {
-      const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-      const startFormatted = start.toLocaleDateString('en-US', options);
-      const endTime = end.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    // const userDoc = await User.findById(userId);
+    // if (userDoc && userDoc.email) {
+    //   const options = { 
+    //     weekday: 'long', 
+    //     year: 'numeric', 
+    //     month: 'long', 
+    //     day: 'numeric',
+    //     hour: '2-digit',
+    //     minute: '2-digit'
+    //   };
+    //   const startFormatted = start.toLocaleDateString('en-US', options);
+    //   const endTime = end.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-      const emailHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .details { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea; }
-            .detail-row { margin: 10px 0; }
-            .label { font-weight: bold; color: #667eea; }
-            .footer { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>🎱 Reservation Confirmed!</h1>
-            </div>
-            <div class="content">
-              <p>Hi <strong>${user}</strong>,</p>
-              <p>Your reservation at <strong>Pool Room</strong> has been confirmed! We're excited to have you play at our bar and enjoy a drink with us. We look forward to seeing you soon!</p>
+    //   const emailHtml = `
+    //     <!DOCTYPE html>
+    //     <html>
+    //     <head>
+    //       <style>
+    //         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    //         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    //         .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+    //         .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+    //         .details { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea; }
+    //         .detail-row { margin: 10px 0; }
+    //         .label { font-weight: bold; color: #667eea; }
+    //         .footer { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
+    //       </style>
+    //     </head>
+    //     <body>
+    //       <div class="container">
+    //         <div class="header">
+    //           <h1>🎱 Reservation Confirmed!</h1>
+    //         </div>
+    //         <div class="content">
+    //           <p>Hi <strong>${user}</strong>,</p>
+    //           <p>Your reservation at <strong>Pool Room</strong> has been confirmed! We're excited to have you play at our bar and enjoy a drink with us. We look forward to seeing you soon!</p>
               
-              <div class="details">
-                <h2 style="margin-top: 0; color: #667eea;">Reservation Details</h2>
-                <div class="detail-row">
-                  <span class="label">Name:</span> ${user}
-                </div>
-                <div class="detail-row">
-                  <span class="label">Table Number:</span> ${tableNumber}
-                </div>
-                <div class="detail-row">
-                  <span class="label">Date & Time:</span> ${startFormatted}
-                </div>
-                <div class="detail-row">
-                  <span class="label">Duration:</span> ${duration} hour${duration > 1 ? 's' : ''}
-                </div>
-                <div class="detail-row">
-                  <span class="label">End Time:</span> ${endTime}
-                </div>
-              </div>
+    //           <div class="details">
+    //             <h2 style="margin-top: 0; color: #667eea;">Reservation Details</h2>
+    //             <div class="detail-row">
+    //               <span class="label">Name:</span> ${user}
+    //             </div>
+    //             <div class="detail-row">
+    //               <span class="label">Table Number:</span> ${tableNumber}
+    //             </div>
+    //             <div class="detail-row">
+    //               <span class="label">Date & Time:</span> ${startFormatted}
+    //             </div>
+    //             <div class="detail-row">
+    //               <span class="label">Duration:</span> ${duration} hour${duration > 1 ? 's' : ''}
+    //             </div>
+    //             <div class="detail-row">
+    //               <span class="label">End Time:</span> ${endTime}
+    //             </div>
+    //           </div>
 
-              <p style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
-                <strong>⏰ Please arrive on time!</strong><br>
-                We're looking forward to seeing you play at our bar. If you need to cancel or modify your reservation, please contact us as soon as possible.
-              </p>
+    //           <p style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+    //             <strong>⏰ Please arrive on time!</strong><br>
+    //             We're looking forward to seeing you play at our bar. If you need to cancel or modify your reservation, please contact us as soon as possible.
+    //           </p>
 
-              <div class="footer">
-                <p>See you soon at Pool Room! 🎱</p>
-                <p style="font-size: 12px; color: #999;">This is an automated confirmation email.</p>
-              </div>
-            </div>
-          </div>
-        </body>
-        </html>
-      `;
+    //           <div class="footer">
+    //             <p>See you soon at Pool Room! 🎱</p>
+    //             <p style="font-size: 12px; color: #999;">This is an automated confirmation email.</p>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </body>
+    //     </html>
+    //   `;
 
-      await sendEmail({
-        to: userDoc.email,
-        subject: `🎱 Reservation Confirmed - ${user} at Pool Room`,
-        html: emailHtml
-      });
-    }
+    //   await sendEmail({
+    //     to: userDoc.email,
+    //     subject: `🎱 Reservation Confirmed - ${user} at Pool Room`,
+    //     html: emailHtml
+    //   });
+    // }
     
     res.status(201).json({ success: true, reservation });
   } catch (error) {
