@@ -151,23 +151,19 @@ export default function UserPanel() {
   const formatDate = (dateString: string | Date | undefined) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'Asia/Tbilisi'
-    });
+    const year = date.getUTCFullYear();
+    const month = date.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+    const day = date.getUTCDate();
+    const weekday = date.toLocaleString('en-US', { weekday: 'short', timeZone: 'UTC' });
+    return `${weekday}, ${month} ${day}, ${year}`;
   };
 
   const formatTime = (dateString: string | Date | undefined) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'Asia/Tbilisi'
-    });
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
   };
 
   const getStatusColor = (status: string | undefined) => {
