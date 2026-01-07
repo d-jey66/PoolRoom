@@ -139,19 +139,20 @@ export default function Reservations() {
 
       console.log('Sending payload:', payload);
       
-      // Set a timeout for the request
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Request timeout - server took too long to respond')), 30000);
-      });
-      
-      const response = await Promise.race([
-        reservationAPI.createReservation(payload),
-        timeoutPromise
-      ]) as any;
-      
-      console.log('Full API Response:', response);
-      console.log('Response type:', typeof response);
-      console.log('Response keys:', Object.keys(response || {}));
+      let response;
+      try {
+        console.log('About to call API...');
+        response = await reservationAPI.createReservation(payload);
+        console.log('API call completed!');
+        console.log('Full API Response:', response);
+        console.log('Response type:', typeof response);
+        console.log('Response keys:', response ? Object.keys(response) : 'null');
+      } catch (apiError: any) {
+        console.error('API call failed with error:', apiError);
+        console.error('Error message:', apiError.message);
+        console.error('Error response:', apiError.response);
+        throw apiError;
+      }
       
       if (!response) {
         console.error('Response is null or undefined!');
