@@ -18,7 +18,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(cors({
-    origin: 'https://pool-room.vercel.app',  
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true
 }));
 
