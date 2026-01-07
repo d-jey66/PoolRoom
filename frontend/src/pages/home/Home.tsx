@@ -258,7 +258,6 @@ export default function Home() {
                 style={{ border: 0, minHeight: '400px' }}
                 allowFullScreen
                 loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
                 className="grayscale hover:grayscale-0 transition-all duration-500"></iframe>
               </CardContent>
             </Card>
