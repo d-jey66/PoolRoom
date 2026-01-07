@@ -253,16 +253,13 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="bg-slate-900/50 border-slate-800 overflow-hidden h-full">
               <CardContent className="p-0 h-full min-h-[400px]">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d371.84191401644944!2d44.818775099999996!3d41.7909177!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40446dc042c0140b%3A0xc561c578ea64e145!2z4YOe4YOj4YOaIOGDoOGDo-GDm-GDmA!5e0!3m2!1ska!2sge!4v1767622971885!5m2!1ska!2sge"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, minHeight: '400px' }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="grayscale hover:grayscale-0 transition-all duration-500"
-                ></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11898.963784330546!2d44.81873111800316!3d41.790796294379426!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40446dc042c0140b%3A0xc561c578ea64e145!2z4YOe4YOj4YOaIOGDoOGDo-GDm-GDmA!5e0!3m2!1ska!2sge!4v1767799520113!5m2!1ska!2sge" width="100%"
+                height="100%"
+                style={{ border: 0, minHeight: '400px' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="grayscale hover:grayscale-0 transition-all duration-500"></iframe>
               </CardContent>
             </Card>
 
