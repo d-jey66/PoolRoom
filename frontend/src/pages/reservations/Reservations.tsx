@@ -20,6 +20,7 @@ interface FormData {
   duration: string;
   tableNumber: string;
 }
+
 export default function Reservations() {
   const { user } = useAuth();
   const [formData, setFormData] = useState<FormData>({
@@ -108,8 +109,6 @@ export default function Reservations() {
     setMessage({ type: '', text: '' });
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -118,28 +117,16 @@ export default function Reservations() {
     try {
       if (!user) {
         setMessage({ type: 'error', text: 'You must be logged in to make a reservation' });
-        setLoading(false);
         return;
       }
 
       if (!formData.name || !formData.month || !formData.day || !formData.startTime || !formData.tableNumber) {
         setMessage({ type: 'error', text: 'Please fill in all fields' });
-        setLoading(false);
         return;
       }
 
       const currentYear = new Date().getFullYear();
-      
       const dateString = `${currentYear}-${formData.month}-${formData.day.padStart(2, '0')}`;
-
-      console.log('Payload being sent:', {
-        userId: user._id,
-        user: formData.name,
-        tableNumber: parseInt(formData.tableNumber),
-        date: dateString,
-        startTime: formData.startTime,
-        duration: parseInt(formData.duration)
-      });
 
       const payload = {
         userId: user._id,
@@ -150,35 +137,29 @@ export default function Reservations() {
         duration: parseInt(formData.duration)
       };
 
+      console.log('Sending payload:', payload);
+      
       await reservationAPI.createReservation(payload);
+      
+      console.log('Reservation created successfully!');
       
       setMessage({ 
         type: 'success', 
         text: `Reservation created! ${formData.name} - Table ${formData.tableNumber} from ${formData.startTime} for ${formData.duration}h` 
       });
       
-      const fields = formRef.current?.querySelectorAll('.form-field');
-      if (fields) {
-        gsap.to(fields, {
-          opacity: 0,
-          x: 20,
-          duration: 0.3,
-          stagger: 0.05,
-          onComplete: () => {
-            setFormData({
-              name: '',
-              month: '',
-              day: '',
-              startTime: '',
-              duration: '1',
-              tableNumber: ''
-            });
-            gsap.to(fields, { opacity: 1, x: 0, duration: 0.3, stagger: 0.05 });
-          }
-        });
-      }
+      // Reset form
+      setFormData({
+        name: '',
+        month: '',
+        day: '',
+        startTime: '',
+        duration: '1',
+        tableNumber: ''
+      });
 
     } catch (error: any) {
+      console.error('Reservation error:', error);
       setMessage({ 
         type: 'error', 
         text: error.message || 'Failed to create reservation. Please try again.' 
@@ -189,10 +170,10 @@ export default function Reservations() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
       <Card ref={cardRef} className="w-full max-w-md shadow-2xl border-slate-800 bg-slate-900/50 backdrop-blur">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Book a Table
           </CardTitle>
           <CardDescription className="text-center text-slate-400">
@@ -316,7 +297,7 @@ export default function Reservations() {
               type="button"
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {loading ? 'Creating Reservation...' : 'Book Reservation'}
             </Button>

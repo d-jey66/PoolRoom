@@ -148,11 +148,6 @@ export default function UserPanel() {
     }
   };
 
-  const handleUpdateReservation = (id: string | undefined) => {
-    if (!id) return;
-    setMessage({ type: 'success', text: 'Update feature coming soon!' });
-  };
-
   const formatDate = (dateString: string | Date | undefined) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -215,6 +210,7 @@ export default function UserPanel() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Profile Card */}
           <Card className="bg-slate-900/50 border-slate-800">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -454,26 +450,17 @@ export default function UserPanel() {
                       </div>
                     </div>
 
-                    <div className="flex gap-2 mt-4 pt-4 border-t border-slate-700">
-                      <Button
-                        onClick={() => handleUpdateReservation(reservation._id)}
-                        disabled={deletingId === reservation._id || reservation.status === 'cancelled' || reservation.status === 'completed'}
-                        variant="ghost"
-                        size="sm"
-                        className="flex-1 text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Update
-                      </Button>
+                    {/* Action Button */}
+                    <div className="mt-4 pt-4 border-t border-slate-700">
                       <Button
                         onClick={() => handleCancelReservation(reservation._id)}
                         disabled={deletingId === reservation._id || reservation.status === 'cancelled' || reservation.status === 'completed'}
                         variant="ghost"
                         size="sm"
-                        className="flex-1 text-red-400 hover:text-red-300 hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full text-red-400 hover:text-red-300 hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <XCircle className="w-4 h-4 mr-2" />
-                        {deletingId === reservation._id ? 'Cancelling...' : 'Cancel'}
+                        {deletingId === reservation._id ? 'Cancelling...' : 'Cancel Reservation'}
                       </Button>
                     </div>
                   </div>
