@@ -39,23 +39,14 @@
   export const reservationAPI = {
     createReservation: (data: Omit<Reservation, "_id">) =>
       handleRequest<Reservation>(axiosInstance.post("/reservations/post", data)),
-  
     getReservations: () =>
       handleRequest<Reservation[]>(axiosInstance.get("/reservations/get")),
-  
     getMyReservations: () =>
       handleRequest<Reservation[]>(axiosInstance.get("/reservations/my-reservations")),
-  
+    getReservationById: (id: string) =>
+      handleRequest<Reservation>(axiosInstance.get(`/reservations/getById/${id}`)),
     updateReservationStatus: (id: string, status: string) =>
-      handleRequest<Reservation>(
-        axiosInstance.put(`/reservations/update/${id}`, { status })
-      ),
-  
+      handleRequest<Reservation>(axiosInstance.put(`/reservations/update/${id}`, { status })),
     deleteReservation: (id: string) =>
       handleRequest<void>(axiosInstance.delete(`/reservations/delete/${id}`)),
-  
-    updateReservation: (id: string, data: Partial<Omit<Reservation, "_id">>) =>
-      handleRequest<Reservation>(
-        axiosInstance.put(`/reservations/update/${id}`, data)
-      ),
   };
