@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect, useRef } from 'react';
-import { User, Lock, Calendar, Clock, Hash, CheckCircle2, AlertCircle, Edit, Save, X, XCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { User, Mail, Lock, Calendar, Clock, Hash, CheckCircle2, AlertCircle, Edit, Save, X, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -155,7 +155,8 @@ export default function UserPanel() {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
+      timeZone: 'Asia/Tbilisi'
     });
   };
 
@@ -164,7 +165,8 @@ export default function UserPanel() {
     const date = new Date(dateString);
     return date.toLocaleTimeString('en-US', {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Tbilisi'
     });
   };
 

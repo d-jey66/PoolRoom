@@ -139,14 +139,17 @@ export default function Reservations() {
 
       console.log('Sending payload:', payload);
       
-      await reservationAPI.createReservation(payload);
+      const response = await reservationAPI.createReservation(payload);
       
-      console.log('Reservation created successfully!');
+      console.log('API Response:', response);
+      console.log('About to set success message');
       
       setMessage({ 
         type: 'success', 
         text: `Reservation created! ${formData.name} - Table ${formData.tableNumber} from ${formData.startTime} for ${formData.duration}h` 
       });
+      
+      console.log('Success message set');
       
       // Reset form
       setFormData({
@@ -157,6 +160,8 @@ export default function Reservations() {
         duration: '1',
         tableNumber: ''
       });
+      
+      console.log('Form reset complete');
 
     } catch (error: any) {
       console.error('Reservation error:', error);
