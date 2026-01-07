@@ -8,8 +8,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VipImage = '/public/vip.png';
-const NormalImage = '/public/normal.png';
+const VipImage = '/vip.png';
+const NormalImage = '/normal.png';
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
