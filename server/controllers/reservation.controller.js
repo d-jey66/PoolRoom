@@ -117,7 +117,7 @@ export const createReservation = async (req, res) => {
 
       console.log('Attempting to send email to:', userDoc.email);
       
-      await sendEmail({
+      sendEmail({
         to: userDoc.email,
         subject: `🎱 Reservation Confirmed - ${user} at Pool Room`,
         html: emailHtml

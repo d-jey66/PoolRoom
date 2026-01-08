@@ -153,26 +153,19 @@ const signup = catchAsync(async (req, res, next) => {
     `;
     
     try {
-        // Send response first
+        await sendEmail({
+            to: newUser.email,
+            subject: '🎱 Verify Your Email - Pool Room',
+            html
+        });
         res.status(201).json({
             status: 'success',
             message: 'User created! Check your email to verify your account.'
         });
-        
-        // Then send email in background (don't await)
-        sendEmail({
-            to: newUser.email,
-            subject: '🎱 Verify Your Email - Pool Room',
-            html
-        }).catch(err => {
-            console.error('Email sending failed:', err);
-            console.error('Error details:', err.message);
-        });
-        
     } catch (error) {
         newUser.verificationCode = undefined;
         await newUser.save({ validateBeforeSave: false });
-        return next(new AppError('Error creating user.', 500));
+        return next(new AppError('Error sending verification email. Try again later.', 500));
     }
 });
 
