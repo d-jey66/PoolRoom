@@ -33,7 +33,7 @@ const signup = catchAsync(async (req, res, next) => {
     const newUser = await User.create({ email, fullname, password });
     const code = newUser.createEmailVerificationToken();
     await newUser.save({ validateBeforeSave: false });
-    const verificationUrl = `${req.protocol}://${req.get("host")}/api/auth/verify/${code}`;
+    const verificationUrl = `${process.env.CLIENT_URL}/verify/${code}`;
     
     const html = `
         <!DOCTYPE html>
@@ -153,19 +153,26 @@ const signup = catchAsync(async (req, res, next) => {
     `;
     
     try {
-        await sendEmail({
-            to: newUser.email,
-            subject: '🎱 Verify Your Email - Pool Room',
-            html
-        });
+        // Send response first
         res.status(201).json({
             status: 'success',
             message: 'User created! Check your email to verify your account.'
         });
+        
+        // Then send email in background (don't await)
+        sendEmail({
+            to: newUser.email,
+            subject: '🎱 Verify Your Email - Pool Room',
+            html
+        }).catch(err => {
+            console.error('Email sending failed:', err);
+            console.error('Error details:', err.message);
+        });
+        
     } catch (error) {
         newUser.verificationCode = undefined;
         await newUser.save({ validateBeforeSave: false });
-        return next(new AppError('Error sending verification email. Try again later.', 500));
+        return next(new AppError('Error creating user.', 500));
     }
 });
 
