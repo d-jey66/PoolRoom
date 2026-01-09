@@ -33,7 +33,7 @@ const signup = catchAsync(async (req, res, next) => {
     const newUser = await User.create({ email, fullname, password });
     const code = newUser.createEmailVerificationToken();
     await newUser.save({ validateBeforeSave: false });
-    const verificationUrl = `${process.env.CLIENT_URL}/verify/${code}`;
+    const verificationUrl = `${req.protocol}://${req.get("host")}/api/auth/verify/${code}`;
     
     const html = `
         <!DOCTYPE html>
@@ -202,7 +202,12 @@ const login = catchAsync(async (req, res, next) => {
 
 // logout
 const logout = catchAsync(async (req, res) => {
-    res.clearCookie('lg');
+    res.clearCookie('lg', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/'
+    });
     res.status(200).json({ status: 'success' });
 });
 
