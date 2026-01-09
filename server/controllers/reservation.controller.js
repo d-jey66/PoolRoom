@@ -9,7 +9,14 @@ export const createReservation = async (req, res) => {
   try {
     const { userId, user, tableNumber, date, startTime, duration } = req.body;
     
-    if (!userId || !user || !tableNumber || !date || !startTime || !duration) {
+    if (
+      !userId ||
+      !user ||
+      !tableNumber ||
+      !date ||
+      !startTime ||
+      duration === undefined
+    ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
     
