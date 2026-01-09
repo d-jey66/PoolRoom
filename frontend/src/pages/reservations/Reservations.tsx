@@ -130,12 +130,13 @@ export default function Reservations() {
 
       const payload = {
         userId: user._id,
-        user: formData.name,
-        tableNumber: parseInt(formData.tableNumber),
+        user: formData.name.trim(),
+        tableNumber: Number(formData.tableNumber),
         date: dateString,
         startTime: formData.startTime,
-        duration: parseInt(formData.duration)
+        duration: Number(formData.duration)
       };
+
 
       console.log('Sending payload:', payload);
       
