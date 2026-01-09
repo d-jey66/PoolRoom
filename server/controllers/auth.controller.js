@@ -151,7 +151,9 @@ const signup = catchAsync(async (req, res, next) => {
         </body>
         </html>
     `;
-    
+  
+    console.log('VERIFY EMAIL: about to send email to', newUser.email);
+
     try {
         await sendEmail({
             to: newUser.email,
