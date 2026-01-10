@@ -1,26 +1,15 @@
-import sgMail from '@sendgrid/mail';
+import { Resend } from 'resend';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async ({ to, subject, html }) => {
-  const msg = {
+  await resend.emails.send({
+    from: 'Pool Room <onboarding@resend.dev>',
+    reply_to: 'poolroomofficialg@gmail.com',
     to,
-    from: {
-      email: process.env.EMAIL_USER,
-      name: 'Pool Room',
-    },
     subject,
     html,
-  };
-
-  try {
-    await sgMail.send(msg);
-  } catch (error) {
-    console.error(
-      error.response?.body || error.message || error
-    );
-    throw error;
-  }
+  });
 };
 
 export default sendEmail;
