@@ -72,17 +72,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+  
       const result = await res.json();
       if (!res.ok) throw new Error(result.message);
-
+  
       toast.update(toastId, {
         render: result.message || "Signup successful 🎉",
         type: "success",
         isLoading: false,
         autoClose: 2000,
       });
-
+  
       navigate("/login");
     } catch (err: any) {
       toast.update(toastId, {
@@ -91,6 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         isLoading: false,
         autoClose: 3000,
       });
+      throw err;
     }
   };
 
@@ -127,6 +128,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         isLoading: false,
         autoClose: 3000,
       });
+      throw err;
     }
   };
 
@@ -145,7 +147,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         type: "success",
         isLoading: false,
         autoClose: 2000,
-      });
+      }); 
 
       setUser(null);
       navigate("/login");
@@ -156,6 +158,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         isLoading: false,
         autoClose: 3000,
       });
+      throw err;
     }
   };
 

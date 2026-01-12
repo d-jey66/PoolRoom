@@ -7,7 +7,7 @@ import sendEmail from "../utils/email.js";
 
 export const createReservation = async (req, res) => {
   try {
-    const { userId, user, tableNumber, date, startTime, duration } = req.body;
+    const { userId, user, tableNumber, date, startTime, duration, tableType } = req.body;
     
     if (
       !userId ||
@@ -15,6 +15,7 @@ export const createReservation = async (req, res) => {
       !tableNumber ||
       !date ||
       !startTime ||
+      !tableType ||
       duration === undefined
     ) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -40,10 +41,14 @@ export const createReservation = async (req, res) => {
       return res.status(409).json({ message: "This time slot is already booked" });
     }
     
+    const price = tableType === 'coupe' ? 15 : 10;
+    
     const reservation = await Reservation.create({ 
       userId,
       user, 
-      tableNumber, 
+      tableNumber,
+      tableType,
+      price,
       start, 
       end 
     });

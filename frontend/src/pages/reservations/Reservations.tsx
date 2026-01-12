@@ -18,6 +18,7 @@ interface FormData {
   day: string;
   startTime: string;
   duration: string;
+  tableType: string;
   tableNumber: string;
 }
 
@@ -29,6 +30,7 @@ export default function Reservations() {
     day: '',
     startTime: '',
     duration: '1',
+    tableType: '',
     tableNumber: ''
   });
   const [loading, setLoading] = useState(false);
@@ -105,8 +107,28 @@ export default function Reservations() {
   ];
 
   const handleInputChange = (name: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      // Reset table number when table type changes
+      if (name === 'tableType') {
+        updated.tableNumber = '';
+      }
+      return updated;
+    });
     setMessage({ type: '', text: '' });
+  };
+
+  const getAvailableTables = () => {
+    if (!formData.tableType) return [];
+    
+    const coupeTables = [1, 2, 5, 8, 11];
+    const normalTables = [3, 4, 6, 7, 9, 10];
+    
+    return formData.tableType === 'coupe' ? coupeTables : normalTables;
+  };
+
+  const getPrice = () => {
+    return formData.tableType === 'coupe' ? 15 : formData.tableType === 'normal' ? 10 : 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -120,23 +142,25 @@ export default function Reservations() {
         return;
       }
 
-      if (!formData.name || !formData.month || !formData.day || !formData.startTime || !formData.tableNumber) {
+      if (!formData.name || !formData.month || !formData.day || !formData.startTime || !formData.tableType || !formData.tableNumber) {
         setMessage({ type: 'error', text: 'Please fill in all fields' });
         return;
       }
 
       const currentYear = new Date().getFullYear();
       const dateString = `${currentYear}-${formData.month}-${formData.day.padStart(2, '0')}`;
+      const price = getPrice();
 
       const payload = {
         userId: user._id,
-        user: formData.name.trim(),
-        tableNumber: Number(formData.tableNumber),
+        user: formData.name,
+        tableNumber: parseInt(formData.tableNumber),
+        tableType: formData.tableType,
+        price: price,
         date: dateString,
         startTime: formData.startTime,
-        duration: Number(formData.duration)
+        duration: parseInt(formData.duration)
       };
-
 
       console.log('Sending payload:', payload);
       
@@ -176,7 +200,8 @@ export default function Reservations() {
         day: '',
         startTime: '',
         duration: '1',
-        tableNumber: ''
+        tableNumber: '',
+        tableType: ''
       });
       
       console.log('Form reset complete');
@@ -222,21 +247,55 @@ export default function Reservations() {
             </div>
 
             <div className="form-field space-y-2">
+              <Label htmlFor="tableType" className="text-slate-300 flex items-center gap-2">
+                <Hash className="w-4 h-4" />
+                Table Type
+              </Label>
+              <Select value={formData.tableType} onValueChange={(value) => handleInputChange('tableType', value)}>
+                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  <SelectItem value="normal" className="text-slate-100">Normal (10 GEL)</SelectItem>
+                  <SelectItem value="coupe" className="text-slate-100">Coupe (15 GEL)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="form-field space-y-2">
               <Label htmlFor="tableNumber" className="text-slate-300 flex items-center gap-2">
                 <Hash className="w-4 h-4" />
                 Table Number
               </Label>
-              <Input
-                id="tableNumber"
-                type="number"
-                value={formData.tableNumber}
-                onChange={(e) => handleInputChange('tableNumber', e.target.value)}
-                placeholder="e.g., 5"
-                min="1"
-                max="10"
-                className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-blue-500"
-              />
+              <Select 
+                value={formData.tableNumber} 
+                onValueChange={(value) => handleInputChange('tableNumber', value)}
+                disabled={!formData.tableType}
+              >
+                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100">
+                  <SelectValue placeholder={!formData.tableType ? "Select type first" : "Select table"} />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  {getAvailableTables().map(num => (
+                    <SelectItem key={num} value={num.toString()} className="text-slate-100">
+                      Table {num}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
+            {formData.tableType && (
+              <div className="form-field">
+                <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center">
+                  <div className="text-sm text-slate-400 mb-1">Total Price</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    {getPrice()} GEL
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1">for {formData.duration} hour(s)</div>
+                </div>
+              </div>
+            )}
 
             <div className="form-field grid grid-cols-2 gap-4">
               <div className="space-y-2">

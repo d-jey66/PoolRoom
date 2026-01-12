@@ -26,6 +26,15 @@ const ReservationSchema = new mongoose.Schema({
     type: String,
     enum: ['pending', 'active', 'completed', 'cancelled'],
     default: 'pending'
+  },
+  tableType: {
+    type: String,
+    enum: ['normal', 'coupe'],
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
   }
 }, { timestamps: true });
 
