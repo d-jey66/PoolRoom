@@ -102,6 +102,12 @@ export const createReservation = async (req, res) => {
                   <span class="label">Table Number:</span> ${tableNumber}
                 </div>
                 <div class="detail-row">
+                  <span class="label">Table Type:</span> ${tableType === 'coupe' ? 'Coupe' : 'Normal'}
+                </div>
+                <div class="detail-row">
+                  <span class="label">Price:</span> ${price} GEL
+                </div>
+                <div class="detail-row">
                   <span class="label">Date & Time:</span> ${startFormatted}
                 </div>
                 <div class="detail-row">
