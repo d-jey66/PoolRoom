@@ -10,7 +10,7 @@ import globalErrorHandler from './controllers/error.controller.js';
 import reservationRouter from './routers/reservation.router.js';
 import { updateReservationStatuses } from './controllers/reservation.controller.js';
 import userRouter from './routers/user.router.js';
-import PaymentRouter from "./routes/payment.router.js";
+import PaymentRouter from "./routers/payment.router.js";
 
 dotenv.config();
 
