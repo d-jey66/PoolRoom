@@ -38,7 +38,7 @@ function App() {
                   <Reservations />
                 </ProtectedRoute>
               }
-            />
+          />
           <Route
             path="/admin-panel"
             element={

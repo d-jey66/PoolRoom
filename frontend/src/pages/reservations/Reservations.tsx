@@ -36,9 +36,9 @@ export default function Reservations() {
     paymentMethod: 'at_venue'
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error' | ''; text: string }>({
-    type: '',
-    text: ''
+  const [message, setMessage] = useState<{ type: 'success' | 'error' | ''; text: string }>({ 
+    type: '', 
+    text: '' 
   });
 
   const cardRef = useRef<HTMLDivElement>(null);
@@ -49,8 +49,18 @@ export default function Reservations() {
     if (cardRef.current) {
       gsap.fromTo(
         cardRef.current,
-        { opacity: 0, y: 50, scale: 0.9 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }
+        { 
+          opacity: 0, 
+          y: 50,
+          scale: 0.9
+        },
+        { 
+          opacity: 1, 
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: 'power3.out'
+        }
       );
     }
   }, []);
@@ -61,7 +71,14 @@ export default function Reservations() {
       gsap.fromTo(
         fields,
         { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out', delay: 0.3 }
+        { 
+          opacity: 1, 
+          x: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'power2.out',
+          delay: 0.3
+        }
       );
     }
   }, []);
@@ -104,13 +121,23 @@ export default function Reservations() {
 
   const getAvailableTables = () => {
     if (!formData.tableType) return [];
+    
     const coupeTables = [1, 2, 5, 8, 11];
     const normalTables = [3, 4, 6, 7, 9, 10];
+    
     return formData.tableType === 'coupe' ? coupeTables : normalTables;
   };
 
   const getPrice = () => {
-    return formData.tableType === 'coupe' ? 15 : formData.tableType === 'normal' ? 10 : 0;
+    if (formData.duration == '1') {
+      return formData.tableType === 'coupe' ? 15 : formData.tableType === 'normal' ? 10 : 0;
+    } else if (formData.duration == '2') {
+      return formData.tableType === 'coupe' ? 30 : formData.tableType === 'normal' ? 20 : 0;
+    }else if (formData.duration == '3') {
+      return formData.tableType === 'coupe' ? 45 : formData.tableType === 'normal' ? 30 : 0;
+    }else if (formData.duration == '4') {
+      return formData.tableType === 'coupe' ? 60 : formData.tableType === 'normal' ? 40 : 0;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -146,34 +173,42 @@ export default function Reservations() {
       };
 
       console.log('Sending payload:', payload);
-
+      
       let response;
       try {
         console.log('About to call API...');
         response = await reservationAPI.createReservation(payload);
         console.log('API call completed!');
         console.log('Full API Response:', response);
+        console.log('Response type:', typeof response);
+        console.log('Response keys:', response ? Object.keys(response) : 'null');
       } catch (apiError: any) {
         console.error('API call failed with error:', apiError);
+        console.error('Error message:', apiError.message);
+        console.error('Error response:', apiError.response);
         throw apiError;
       }
-
+      
       if (!response) {
         console.error('Response is null or undefined!');
         throw new Error('No response from server');
       }
-
+      
+      console.log('About to set success message');
+      
       // If payment method is online, redirect to payment page
       if (formData.paymentMethod === 'online' && response.reservation) {
         window.location.href = `/payment/${response.reservation._id}`;
         return;
       }
-
-      setMessage({
-        type: 'success',
-        text: `Reservation created! ${formData.name} - Table ${formData.tableNumber} from ${formData.startTime} for ${formData.duration}h`
+      
+      setMessage({ 
+        type: 'success', 
+        text: `Reservation created! ${formData.name} - Table ${formData.tableNumber} from ${formData.startTime} for ${formData.duration}h` 
       });
-
+      
+      console.log('Success message set');
+      
       // Reset form
       setFormData({
         name: '',
@@ -185,11 +220,14 @@ export default function Reservations() {
         tableNumber: '',
         paymentMethod: 'at_venue'
       });
+      
+      console.log('Form reset complete');
+
     } catch (error: any) {
       console.error('Reservation error:', error);
-      setMessage({
-        type: 'error',
-        text: error.message || 'Failed to create reservation. Please try again.'
+      setMessage({ 
+        type: 'error', 
+        text: error.message || 'Failed to create reservation. Please try again.' 
       });
     } finally {
       setLoading(false);
@@ -198,7 +236,7 @@ export default function Reservations() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
-      <Card ref={cardRef} className="w-full max-w-md shadow-2xl border-slate-800 bg-slate-900/50 backdrop-blur">
+      <Card ref={cardRef} className="w-full max-w-2xl shadow-2xl border-slate-800 bg-slate-900/50 backdrop-blur">
         <CardHeader className="space-y-1">
           <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Book a Table
@@ -207,10 +245,10 @@ export default function Reservations() {
             Reserve your spot with us
           </CardDescription>
         </CardHeader>
-
+        
         <CardContent>
           <div ref={formRef} className="space-y-5">
-            {/* Name Field */}
+            {/* Name Field - Full Width */}
             <div className="form-field space-y-2">
               <Label htmlFor="name" className="text-slate-300 flex items-center gap-2">
                 <User className="w-4 h-4" />
@@ -226,134 +264,58 @@ export default function Reservations() {
               />
             </div>
 
-            {/* Table Type */}
-            <div className="form-field space-y-2">
-              <Label htmlFor="tableType" className="text-slate-300 flex items-center gap-2">
-                <Hash className="w-4 h-4" />
-                Table Type
-              </Label>
-              <Select value={formData.tableType} onValueChange={(value) => handleInputChange('tableType', value)}>
-                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-700">
-                  <SelectItem value="normal" className="text-slate-100">Normal (10 GEL)</SelectItem>
-                  <SelectItem value="coupe" className="text-slate-100">Coupe (15 GEL)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Table Number */}
-            <div className="form-field space-y-2">
-              <Label htmlFor="tableNumber" className="text-slate-300 flex items-center gap-2">
-                <Hash className="w-4 h-4" />
-                Table Number
-              </Label>
-              <Select
-                value={formData.tableNumber}
-                onValueChange={(value) => handleInputChange('tableNumber', value)}
-                disabled={!formData.tableType}
-              >
-                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100">
-                  <SelectValue placeholder={!formData.tableType ? "Select type first" : "Select table"} />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-700">
-                  {getAvailableTables().map(num => (
-                    <SelectItem key={num} value={num.toString()} className="text-slate-100">
-                      Table {num}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Price Display */}
-            {formData.tableType && (
-              <div className="form-field">
-                <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center">
-                  <div className="text-sm text-slate-400 mb-1">Total Price</div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    {getPrice()} GEL
-                  </div>
-                  <div className="text-xs text-slate-500 mt-1">
-                    for {formData.duration} hour(s)
-                    {formData.paymentMethod === 'online' && (
-                      <span className="text-green-400 ml-1">• 10% discount applied!</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Payment Method */}
-            <div className="form-field space-y-3">
-              <Label className="text-slate-300">Payment Method</Label>
+            {/* Table Type & Table Number - 2 Columns */}
+            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                {/* Pay Online */}
-                <div
-                  onClick={() => handleInputChange('paymentMethod', 'online')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    formData.paymentMethod === 'online'
-                      ? 'border-green-500 bg-green-900/20'
-                      : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        formData.paymentMethod === 'online' ? 'border-green-500' : 'border-slate-500'
-                      }`}>
-                        {formData.paymentMethod === 'online' && (
-                          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="text-slate-100 font-semibold">Pay Now Online</div>
-                        <div className="text-sm text-slate-400">Get 10% discount instantly</div>
-                      </div>
-                    </div>
-                    <div className="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-sm font-semibold">
-                      -10%
-                    </div>
-                  </div>
-                </div>
+                <Label htmlFor="tableType" className="text-slate-300 flex items-center gap-2">
+                  <Hash className="w-4 h-4" />
+                  Table Type
+                </Label>
+                <Select value={formData.tableType} onValueChange={(value) => handleInputChange('tableType', value)}>
+                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-700">
+                    <SelectItem value="normal" className="text-slate-100">Normal (10 GEL)</SelectItem>
+                    <SelectItem value="coupe" className="text-slate-100">Coupe (15 GEL)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-                {/* Pay at Venue */}
-                <div
-                  onClick={() => handleInputChange('paymentMethod', 'at_venue')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    formData.paymentMethod === 'at_venue'
-                      ? 'border-blue-500 bg-blue-900/20'
-                      : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                  }`}
+              <div className="space-y-2">
+                <Label htmlFor="tableNumber" className="text-slate-300 flex items-center gap-2">
+                  <Hash className="w-4 h-4" />
+                  Table Number
+                </Label>
+                <Select 
+                  value={formData.tableNumber} 
+                  onValueChange={(value) => handleInputChange('tableNumber', value)}
+                  disabled={!formData.tableType}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      formData.paymentMethod === 'at_venue' ? 'border-blue-500' : 'border-slate-500'
-                    }`}>
-                      {formData.paymentMethod === 'at_venue' && (
-                        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="text-slate-100 font-semibold">Pay at Venue</div>
-                      <div className="text-sm text-slate-400">Pay when you arrive</div>
-                    </div>
-                  </div>
-                </div>
+                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                    <SelectValue placeholder={!formData.tableType ? "Select type first" : "Select table"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-700">
+                    {getAvailableTables().map(num => (
+                      <SelectItem key={num} value={num.toString()} className="text-slate-100">
+                        Table {num}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            {/* Date Selection */}
-            <div className="form-field grid grid-cols-2 gap-4">
+            {/* Date Fields - 2 Columns */}
+            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="month" className="text-slate-300 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Month
                 </Label>
                 <Select value={formData.month} onValueChange={(value) => handleInputChange('month', value)}>
-                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100">
-                    <SelectValue placeholder="Select" />
+                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                    <SelectValue placeholder="Select month" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-800 border-slate-700">
                     {months.map(month => (
@@ -380,44 +342,114 @@ export default function Reservations() {
               </div>
             </div>
 
-            {/* Time Selection */}
-            <div className="form-field space-y-2">
-              <Label htmlFor="startTime" className="text-slate-300 flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                Start Time
-              </Label>
-              <Input
-                id="startTime"
-                type="time"
-                value={formData.startTime}
-                onChange={(e) => handleInputChange('startTime', e.target.value)}
-                className="bg-slate-800 border-slate-700 text-slate-100 focus:border-blue-500"
-              />
+            {/* Time & Duration - 2 Columns */}
+            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="startTime" className="text-slate-300 flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Start Time
+                </Label>
+                <Input
+                  id="startTime"
+                  type="time"
+                  value={formData.startTime}
+                  onChange={(e) => handleInputChange('startTime', e.target.value)}
+                  className="bg-slate-800 border-slate-700 text-slate-100 focus:border-blue-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="duration" className="text-slate-300">Duration</Label>
+                <Select value={formData.duration} onValueChange={(value) => handleInputChange('duration', value)}>
+                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-800 border-slate-700">
+                    <SelectItem value="1" className="text-slate-100">1 Hour</SelectItem>
+                    <SelectItem value="2" className="text-slate-100">2 Hours</SelectItem>
+                    <SelectItem value="3" className="text-slate-100">3 Hours</SelectItem>
+                    <SelectItem value="4" className="text-slate-100">4 Hours</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            {/* Duration */}
-            <div className="form-field space-y-2">
-              <Label htmlFor="duration" className="text-slate-300">Duration</Label>
-              <Select value={formData.duration} onValueChange={(value) => handleInputChange('duration', value)}>
-                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-700">
-                  <SelectItem value="1" className="text-slate-100">1 Hour</SelectItem>
-                  <SelectItem value="2" className="text-slate-100">2 Hours</SelectItem>
-                  <SelectItem value="3" className="text-slate-100">3 Hours</SelectItem>
-                  <SelectItem value="4" className="text-slate-100">4 Hours</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Price Display */}
+            {formData.tableType && (
+              <div className="form-field">
+                <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center">
+                  <div className="text-xs text-slate-400 mb-1">Total Price</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    {getPrice()} GEL
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1">
+                    for {formData.duration} hour(s)
+                    {formData.paymentMethod === 'online' && (
+                      <span className="text-green-400 ml-1">• 10% off!</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Payment Method */}
+            <div className="form-field space-y-3">
+              <Label className="text-slate-300 text-sm">Payment Method</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div 
+                  onClick={() => handleInputChange('paymentMethod', 'online')}
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.paymentMethod === 'online' 
+                      ? 'border-green-500 bg-green-900/20' 
+                      : 'border-slate-700 bg-slate-800 hover:border-slate-600'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        formData.paymentMethod === 'online' ? 'border-green-500' : 'border-slate-500'
+                      }`}>
+                        {formData.paymentMethod === 'online' && (
+                          <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                        )}
+                      </div>
+                      <div className="text-slate-100 font-semibold">Pay Now Online</div>
+                    </div>
+                    <div className="bg-green-900/40 text-green-400 px-2.5 py-1 rounded-full text-xs font-bold">
+                      -10%
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-400 ml-7">Get instant 10% discount</div>
+                </div>
+
+                <div 
+                  onClick={() => handleInputChange('paymentMethod', 'at_venue')}
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.paymentMethod === 'at_venue' 
+                      ? 'border-blue-500 bg-blue-900/20' 
+                      : 'border-slate-700 bg-slate-800 hover:border-slate-600'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      formData.paymentMethod === 'at_venue' ? 'border-blue-500' : 'border-slate-500'
+                    }`}>
+                      {formData.paymentMethod === 'at_venue' && (
+                        <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                      )}
+                    </div>
+                    <div className="text-slate-100 font-semibold">Pay at Venue</div>
+                  </div>
+                  <div className="text-xs text-slate-400 ml-7">Pay when you arrive</div>
+                </div>
+              </div>
             </div>
 
-            {/* Message Alert */}
+            {/* Alert Message */}
             {message.text && (
               <div ref={alertRef}>
-                <Alert
-                  variant={message.type === 'error' ? 'destructive' : 'default'}
-                  className={message.type === 'success' ? 'bg-green-900/20 border-green-700 text-green-400' : ''}
-                >
+                <Alert variant={message.type === 'error' ? 'destructive' : 'default'} 
+                       className={message.type === 'success' ? 'bg-green-900/20 border-green-700 text-green-400' : ''}>
                   {message.type === 'success' ? (
                     <CheckCircle2 className="h-4 w-4" />
                   ) : (
@@ -433,7 +465,7 @@ export default function Reservations() {
               type="button"
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 py-6 text-lg"
             >
               {loading ? 'Creating Reservation...' : 'Book Reservation'}
             </Button>
