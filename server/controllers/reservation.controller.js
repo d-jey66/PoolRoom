@@ -41,7 +41,7 @@ export const createReservation = async (req, res) => {
       return res.status(409).json({ message: "This time slot is already booked" });
     }
     
-    const price = tableType === 'coupe' ? 15 : 10;
+    const price = req.body;
     
     const reservation = await Reservation.create({ 
       userId,

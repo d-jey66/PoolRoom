@@ -109,7 +109,6 @@ export default function Reservations() {
   const handleInputChange = (name: keyof FormData, value: string) => {
     setFormData(prev => {
       const updated = { ...prev, [name]: value };
-      // Reset table number when table type changes
       if (name === 'tableType') {
         updated.tableNumber = '';
       }
