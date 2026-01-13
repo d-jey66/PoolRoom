@@ -128,7 +128,16 @@ export default function Reservations() {
   };
 
   const getPrice = () => {
-    return formData.tableType === 'coupe' ? 15 : formData.tableType === 'normal' ? 10 : 0;
+    if (formData.duration == '1') {
+      return formData.tableType === 'coupe' ? 15 : formData.tableType === 'normal' ? 10 : 0;
+    } else if (formData.duration == '2'){
+      return formData.tableType === 'coupe' ? 30 : formData.tableType === 'normal' ? 20 : 0;
+    } else if (formData.duration == '3') {
+      return formData.tableType === 'coupe' ? 45 : formData.tableType === 'normal' ? 30 : 0;
+    } else {
+      return formData.tableType === 'coupe' ? 60 : formData.tableType === 'normal' ? 40 : 0;
+    }
+    
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
