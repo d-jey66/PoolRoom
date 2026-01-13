@@ -8,6 +8,7 @@ import Reservations from "./pages/reservations/Reservations"
 import ProtectedRoute from "./protected/ProtectedRoutes"
 import Navbar from "./components/layout/Navbar"
 import TawkChat from './components/layout/TawkChat'
+import Payment from './pages/payment/Payment'
 
 import { ToastContainer } from 'react-toastify';
 
@@ -38,7 +39,17 @@ function App() {
                   <Reservations />
                 </ProtectedRoute>
               }
-          />
+        />
+        
+        <Route
+        path="/payment"
+        element={
+          <ProtectedRoute>
+            <Payment />
+          </ProtectedRoute>
+        }
+      />
+        
           <Route
             path="/admin-panel"
             element={
