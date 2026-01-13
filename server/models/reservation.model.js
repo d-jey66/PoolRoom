@@ -35,6 +35,19 @@ const ReservationSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['paid', 'unpaid', 'pending'],
+    default: 'unpaid'
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['online', 'at_venue'],
+    required: true
+  },
+  stripeSessionId: {
+    type: String
   }
 }, { timestamps: true });
 

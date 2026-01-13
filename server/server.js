@@ -10,6 +10,7 @@ import globalErrorHandler from './controllers/error.controller.js';
 import reservationRouter from './routers/reservation.router.js';
 import { updateReservationStatuses } from './controllers/reservation.controller.js';
 import userRouter from './routers/user.router.js';
+import paymentRouter from "./routes/payment.router.js";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.get('/api/status', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/reservations', reservationRouter);
 app.use('/api/users', userRouter);
+app.use("/api/payments", paymentRouter);
 
 app.use(globalErrorHandler);
 
