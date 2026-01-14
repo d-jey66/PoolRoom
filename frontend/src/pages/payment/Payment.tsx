@@ -10,7 +10,7 @@ const stripePromise = loadStripe(
 );
 
 export default function Payment() {
-  const { reservationId, price, duration } = useParams();
+  const { reservationId, price } = useParams();
 
   const fetchClientSecret = async () => {
     const res = await fetch(
@@ -20,8 +20,7 @@ export default function Payment() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           reservationId,
-          price,
-          duration
+          price
         }),
       }
     );
