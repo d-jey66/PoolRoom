@@ -4,6 +4,6 @@ import { createCheckoutSession, handleWebhook } from "../controllers/payment.con
 const PaymentRouter = express.Router();
 
 PaymentRouter.post("/webhook", express.raw({ type: 'application/json' }), handleWebhook);
-PaymentRouter.post("/create-checkout-session", createCheckoutSession);
+PaymentRouter.post("/create-checkout-session", express.json(), createCheckoutSession);
 
 export default PaymentRouter;
