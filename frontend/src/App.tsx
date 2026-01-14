@@ -42,7 +42,7 @@ function App() {
         />
         
         <Route
-        path="/payment/:reservationId:price/:duration"
+        path="/payment/:reservationId/:price/:duration"
         element={
           <ProtectedRoute>
             <Payment />
