@@ -33,6 +33,9 @@ app.use(rateLimiter({
 app.use(helmet());
 
 app.use(cookieParser());
+
+app.use("/api/payments", PaymentRouter);
+
 app.use(express.json());
 
 app.get('/api/status', (req, res) => {
@@ -42,7 +45,6 @@ app.get('/api/status', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/reservations', reservationRouter);
 app.use('/api/users', userRouter);
-app.use("/api/payments", PaymentRouter);
 
 app.use(globalErrorHandler);
 
