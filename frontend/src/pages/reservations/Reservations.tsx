@@ -204,7 +204,7 @@ export default function Reservations() {
           price: price,
           duration: formData.duration
         });
-        window.location.href = `/payment/${response.reservation._id}/${price}/${formData.duration}`;
+        // window.location.href = `/payment/${response.reservation._id}/${price}/${formData.duration}`;
         return;
       }
       
