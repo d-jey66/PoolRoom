@@ -198,8 +198,8 @@ export default function Reservations() {
       
       // If payment method is online, redirect to payment page
       if (formData.paymentMethod === 'online' && response.reservation) {
-        window.location.href = `/payment/${response.reservation._id}`;
-        return;
+        window.location.href = `/payment/${response.reservation._id}/${price}/${formData.duration}`
+        return
       }
       
       setMessage({ 
