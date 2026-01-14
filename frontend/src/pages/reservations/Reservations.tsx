@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
 import { Calendar, Clock, User, Hash, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -129,8 +128,6 @@ export default function Reservations() {
     return formData.tableType === 'coupe' ? coupeTables : normalTables;
   };
 
-  const navigate = useNavigate();
-
   const getPrice = () => {
     if (formData.duration == '1') {
       return formData.tableType === 'coupe' ? 15 : formData.tableType === 'normal' ? 10 : 0;
@@ -207,7 +204,7 @@ export default function Reservations() {
           price: price,
           duration: formData.duration
         });
-        navigate(`/payment/${response.reservation._id}/${price}/${formData.duration}`);
+        window.location.href = `/payment/${response.reservation._id}/${price}/${formData.duration}`;
         return;
       }
       
