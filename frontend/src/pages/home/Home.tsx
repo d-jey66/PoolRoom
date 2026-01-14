@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { Link } from 'react-router';
-import { Calendar, Clock, MapPin, Phone, Mail, Star } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router';
+import { Calendar, Clock, MapPin, Phone, Mail, Star, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -12,10 +13,21 @@ const VipImage = '/vip.png';
 const NormalImage = '/normal.png';
 
 export default function Home() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const heroRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const tablesRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
+
+  // Payment success handler
+  useEffect(() => {
+    if (searchParams.get('payment') === 'success') {
+      // Clear the URL parameter after showing message
+      setTimeout(() => {
+        setSearchParams({});
+      }, 5000);
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     // Hero animation
@@ -100,6 +112,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {searchParams.get('payment') === 'success' && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top">
+          <Alert className="bg-green-900/90 border-green-700 text-green-100 shadow-2xl max-w-md">
+            <CheckCircle className="h-5 w-5" />
+            <AlertDescription className="ml-2">
+              Payment successful! Your reservation is confirmed. Check your email for details.
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
