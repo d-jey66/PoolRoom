@@ -4,9 +4,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createCheckoutSession = async (req, res, next) => {
   try {
-    const { reservationId, price } = req.body;
+    const { reservationId, price, duration } = req.body;
 
-    if (!reservationId || !price) {
+    if (!reservationId || !price || !duration) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -23,14 +23,14 @@ export const createCheckoutSession = async (req, res, next) => {
             },
             unit_amount: Math.round(price * 100),
           },
-          quantity: 1,
+          quantity: duration,
         },
       ],
       metadata: { reservationId },
       return_url: `${process.env.CLIENT_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}&reservation_id=${reservationId}`,
     });
 
-    res.json({ clientSecret: session.client_secret });
+    res.json({ clientSecret: session.id });
   } catch (err) {
     next(err);
   }
