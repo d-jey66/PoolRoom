@@ -30,7 +30,7 @@ export const createCheckoutSession = async (req, res, next) => {
       return_url: `${process.env.CLIENT_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}&reservation_id=${reservationId}`,
     });
 
-    res.status(200).json({ clientSecret: session.id });
+    res.status(200).json({ clientSecret: session.client_secret });
       } catch (err) {
         console.error("Stripe checkout session creation error:", err);
         res.status(500).json({ message: "Failed to create checkout session" });
