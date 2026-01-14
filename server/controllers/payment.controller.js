@@ -28,7 +28,7 @@ export const createCheckoutSession = async (req, res, next) => {
         },
       ],
       metadata: { reservationId },
-      return_url: `${process.env.CLIENT_URL}/?payment=success`,
+      return_url: `${process.env.CLIENT_URL}/?payment=success&session_id={CHECKOUT_SESSION_ID}`
     });
 
     res.status(200).json({ clientSecret: session.client_secret });
