@@ -24,7 +24,7 @@ export const createCheckoutSession = async (req, res, next) => {
             },
             unit_amount: Math.round(price * 100),
           },
-          quantity: duration,
+          quantity: 1,
         },
       ],
       metadata: { reservationId },
