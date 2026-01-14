@@ -127,7 +127,7 @@ export default function AdminPanel() {
     return userId[field] || 'N/A';
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | undefined) => {
     switch (status) {
       case 'active':
         return 'bg-green-900/20 text-green-400 border-green-700';
@@ -140,6 +140,25 @@ export default function AdminPanel() {
       default:
         return 'bg-slate-800 text-slate-400';
     }
+  };
+  
+  const getPaymentStatusColor = (status: string | undefined) => {
+    switch (status) {
+      case 'paid':
+        return 'bg-green-900/20 text-green-400 border-green-700';
+      case 'pending':
+        return 'bg-yellow-900/20 text-yellow-400 border-yellow-700';
+      case 'unpaid':
+        return 'bg-red-900/20 text-red-400 border-red-700';
+      default:
+        return 'bg-slate-800 text-slate-400';
+    }
+  };
+  
+  const formatPaymentMethod = (method: string | undefined) => {
+    if (method === 'online') return 'Online';
+    if (method === 'at_venue') return 'At venue';
+    return 'Unknown';
   };
 
   if (loading) {
@@ -271,9 +290,21 @@ export default function AdminPanel() {
                         <CardTitle className="text-xl text-slate-100">
                           {reservation.user}
                         </CardTitle>
-                        <Badge className={getStatusColor(reservation.status || 'pending')}>
-                          {reservation.status || 'pending'}
-                        </Badge>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          <Badge className={getStatusColor(reservation.status)}>
+                            {reservation.status || 'pending'}
+                          </Badge>
+                        
+                          <Badge className="bg-slate-700/40 text-slate-200 border border-slate-600">
+                            {formatPaymentMethod(reservation.paymentMethod)}
+                          </Badge>
+                        
+                          {reservation.paymentMethod === 'online' && (
+                            <Badge className={getPaymentStatusColor(reservation.paymentStatus)}>
+                              {reservation.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       <CardDescription className="text-slate-400">
                         <div className="flex items-center gap-2 mt-1">
