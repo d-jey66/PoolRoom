@@ -180,6 +180,25 @@ export default function UserPanel() {
         return 'bg-slate-800 text-slate-400';
     }
   };
+  
+  const getPaymentStatusColor = (status: string | undefined) => {
+    switch (status) {
+      case 'paid':
+        return 'bg-green-900/20 text-green-400 border-green-700';
+      case 'pending':
+        return 'bg-yellow-900/20 text-yellow-400 border-yellow-700';
+      case 'unpaid':
+        return 'bg-red-900/20 text-red-400 border-red-700';
+      default:
+        return 'bg-slate-800 text-slate-400';
+    }
+  };
+  
+  const formatPaymentMethod = (method: string | undefined) => {
+    if (method === 'online') return 'Online';
+    if (method === 'at_venue') return 'At venue';
+    return 'Unknown';
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6">
@@ -406,9 +425,21 @@ export default function UserPanel() {
                         <h3 className="text-slate-100 font-semibold text-lg">
                           {reservation.user}
                         </h3>
-                        <Badge className={`${getStatusColor(reservation.status)} mt-1`}>
-                          {reservation.status || 'pending'}
-                        </Badge>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          <Badge className={getStatusColor(reservation.status)}>
+                            {reservation.status || 'pending'}
+                          </Badge>
+                        
+                          <Badge className="bg-slate-700/40 text-slate-200 border border-slate-600">
+                            {formatPaymentMethod(reservation.paymentMethod)}
+                          </Badge>
+                        
+                          {reservation.paymentMethod === 'online' && (
+                            <Badge className={getPaymentStatusColor(reservation.paymentStatus)}>
+                              {reservation.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg">
                         <Hash className="w-4 h-4 text-purple-400" />

@@ -18,10 +18,11 @@ interface FormData {
   day: string;
   startTime: string;
   duration: string;
-  tableType: string;
+  tableType: "normal" | "coupe" | "";
   tableNumber: string;
-  paymentMethod: string;
+  paymentMethod: "online" | "at_venue";
 }
+
 
 export default function Reservations() {
   const { user } = useAuth();
