@@ -70,7 +70,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" ref={logoRef} className="flex items-center space-x-2 group">
-            <img src={Logo} alt="Pool Room Logo" className="w-13 h-13 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg group-hover:shadow-purple-500/50 transition-all duration-300" />
+            <img src={Logo} alt="Pool Room Logo" className="w-13 h-13 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-purple-500/50 transition-all duration-300" />
             <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Pool Room
             </span>
