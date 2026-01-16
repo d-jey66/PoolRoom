@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { MapPin, Phone, Mail, Clock, Star } from 'lucide-react';
@@ -65,8 +63,6 @@ export default function Footer() {
         credentials: 'include',
         body: JSON.stringify({ rating: value }),
       });
-
-      const data = await res.json();
       
       if (res.ok) {
         setRating(value);
