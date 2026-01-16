@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import gsap from 'gsap';
 
 
-const Logo = '/Logo.png'
+const Logo = '/LogoTab.png'
 
 export default function Navbar() {
   const { user, logout } = useAuth();
