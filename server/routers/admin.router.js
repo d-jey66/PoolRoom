@@ -6,8 +6,8 @@ import {
   demoteToUser,
   deleteUser
 } from "../controllers/admin.controller.js";
-import { adminRoute } from "../middleware/auth.middleware.js";
-import protect from "../middleware/auth.middleware.js";
+import { adminRoute } from "../middlewares/auth.middleware.js";
+import protect from "../middlewares/auth.middleware.js";
 
 const AdminRouter = express.Router();
 
