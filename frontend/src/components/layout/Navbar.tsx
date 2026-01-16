@@ -103,7 +103,7 @@ export default function Navbar() {
                     }`}
                   >
                     <LayoutDashboard className="w-4 h-4" />
-                    {user.role === 'admin' ? 'Admin Panel' : 'My Panel'}
+                    {user.role === 'admin' ? 'Admin Panel' : 'My Profile'}
                   </Button>
                 </Link>
 
