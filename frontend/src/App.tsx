@@ -53,13 +53,13 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="/admin-panel" element={
+      <Route path="/admin-panel/*" element={
         <ProtectedRoute requireAdmin>
           <AdminLayout>
             <Routes>
               <Route index element={<AdminDashboard />} />
-              <Route path="/users" element={<AdminUsers />} />
-              <Route path="/reservations" element={<AdminReservations />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="reservations" element={<AdminReservations />} />
             </Routes>
           </AdminLayout>
         </ProtectedRoute>

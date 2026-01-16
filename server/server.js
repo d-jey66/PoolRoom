@@ -13,6 +13,7 @@ import userRouter from './routers/user.router.js';
 import PaymentRouter from "./routers/payment.router.js";
 import { handleWebhook } from './controllers/payment.controller.js';
 import RatingRouter from './routers/rating.router.js';
+import AdminRouter from './routers/admin.router.js';
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/reservations', reservationRouter);
 app.use('/api/users', userRouter);
 app.use('/api/ratings', RatingRouter)
+app.use('/api/admin', AdminRouter);
 
 app.use(globalErrorHandler);
 
