@@ -12,6 +12,7 @@ import { updateReservationStatuses } from './controllers/reservation.controller.
 import userRouter from './routers/user.router.js';
 import PaymentRouter from "./routers/payment.router.js";
 import { handleWebhook } from './controllers/payment.controller.js';
+import RatingRouter from './routers/rating.router.js';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.get('/api/status', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/reservations', reservationRouter);
 app.use('/api/users', userRouter);
+app.use('/api/ratings', RatingRouter)
 
 app.use(globalErrorHandler);
 
