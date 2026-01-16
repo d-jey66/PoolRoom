@@ -58,8 +58,8 @@ function App() {
           <AdminLayout>
             <Routes>
               <Route index element={<AdminDashboard />} />
-              <Route path="users" element={<AdminUsers />} />
-              <Route path="reservations" element={<AdminReservations />} />
+              <Route path="/users" element={<AdminUsers />} />
+              <Route path="/reservations" element={<AdminReservations />} />
             </Routes>
           </AdminLayout>
         </ProtectedRoute>
