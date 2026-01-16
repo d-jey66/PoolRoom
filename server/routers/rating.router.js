@@ -4,7 +4,7 @@ import {
   getAverageRating, 
   getUserRating 
 } from "../controllers/rating.controller.js";
-import { protect } from "../middlewares/auth.middleware.js";
+import protect from "../middlewares/auth.middleware.js";
 
 const RatingRouter = express.Router();
 
