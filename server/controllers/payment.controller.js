@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import Reservation from "../models/reservation.model.js";
+import Transaction from "../models/transaction.model.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -51,10 +52,26 @@ export const handleWebhook = async (req, res) => {
   
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    await Reservation.findByIdAndUpdate(session.metadata.reservationId, {
+    const reservationId = session.metadata.reservationId;
+      
+    const reservation = await Reservation.findByIdAndUpdate(reservationId, {
       paymentStatus: 'paid'
     });
+      
+    if (reservation) {
+      await Transaction.create({
+        reservationId: reservation._id,
+        userId: reservation.userId,
+        userName: reservation.user,
+        amount: reservation.price,
+        tableNumber: reservation.tableNumber,
+        tableType: reservation.tableType,
+        duration: reservation.duration,
+        paymentMethod: 'online',
+        status: 'completed',
+        transactionDate: new Date()
+      });
+    }
   }
-  
   res.json({ received: true });
 };

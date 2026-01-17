@@ -76,3 +76,16 @@ export const getUserRating = async (req, res) => {
     res.status(500).json({ message: "Failed to get user rating" });
   }
 };
+
+export const getAllRatings = async (req, res) => {
+  try {
+    const ratings = await Rating.find()
+      .sort({ createdAt: -1 })
+      .limit(50);
+    
+    res.status(200).json({ ratings });
+  } catch (error) {
+    console.error("Error getting all ratings:", error);
+    res.status(500).json({ message: "Failed to get ratings" });
+  }
+};

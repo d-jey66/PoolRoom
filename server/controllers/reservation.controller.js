@@ -1,6 +1,7 @@
 import Reservation from "../models/reservation.model.js";
 import User from "../models/user.model.js";
 import sendEmail from "../utils/email.js";
+import Transaction from "../models/transaction.model.js";
 
 
 // create resrvation
@@ -28,8 +29,9 @@ export const createReservation = async (req, res) => {
       return res.status(400).json({ message: "Duration must be 1, 2, 3 or 4 hours" });
     }
     
-    const start = new Date(`${date}T${startTime}:00`);
-    if (isNaN(start)) return res.status(400).json({ message: "Invalid date or time format" });
+    const localTimeString = `${date}T${startTime}:00+04:00`;
+    const start = new Date(localTimeString);
+    if (isNaN(start.getTime())) return res.status(400).json({ message: "Invalid date or time format" });
     
     const end = new Date(start.getTime() + duration * 60 * 60 * 1000);
     
@@ -221,7 +223,36 @@ export const updateReservationStatus = async (req, res) => {
   }
 };
 
-
+export const completeReservation = async (req, res) => {
+  try {
+    const reservation = await Reservation.findById(req.params.id);
+    
+    if (!reservation) {
+      return res.status(404).json({ message: "Reservation not found" });
+    }
+    
+    reservation.status = 'completed';
+    reservation.paymentStatus = 'paid';
+    await reservation.save();
+    
+    await Transaction.create({
+      reservationId: reservation._id,
+      userId: reservation.userId,
+      userName: reservation.user,
+      amount: reservation.price,
+      tableNumber: reservation.tableNumber,
+      tableType: reservation.tableType,
+      duration: reservation.duration,
+      paymentMethod: reservation.paymentMethod,
+      status: 'completed',
+      transactionDate: new Date()
+    });
+    
+    res.json({ message: 'Reservation completed and revenue recorded' });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to complete reservation" });
+  }
+};
 
 // delete reservation
 
@@ -244,27 +275,20 @@ export const deleteReservation = async (req, res) => {
 
 export const updateReservationStatuses = async () => {
   const now = new Date();
-  
+
   try {
     await Reservation.updateMany(
-      { 
+      {
         start: { $lte: now },
         end: { $gt: now },
-        status: 'pending'
+        status: 'pending',
       },
       { status: 'active' }
     );
-    
-    const completedReservations = await Reservation.find({
-      end: { $lte: now },
-      status: { $in: ['pending', 'active'] }
-    });
-    
+
     await Reservation.deleteMany({
       end: { $lte: now },
-      status: { $in: ['pending', 'active'] }
     });
-    
 
   } catch (error) {
     console.error('Error updating reservation statuses:', error);

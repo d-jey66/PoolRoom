@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Reservation from "../models/reservation.model.js";
+import Transaction from "../models/transaction.model.js";
 
 export const getDashboardStats = async (req, res) => {
   try {
@@ -8,25 +9,25 @@ export const getDashboardStats = async (req, res) => {
     const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
 
-    const allPaidReservations = await Reservation.find({ paymentStatus: 'paid' });
+    const allTransactions = await Transaction.find({ status: 'completed' });
     
-    const weekRevenue = allPaidReservations
-      .filter(r => new Date(r.createdAt) >= oneWeekAgo)
-      .reduce((sum, r) => sum + r.price, 0);
+    const weekRevenue = allTransactions
+      .filter(t => new Date(t.transactionDate) >= oneWeekAgo)
+      .reduce((sum, t) => sum + t.amount, 0);
     
-    const monthRevenue = allPaidReservations
-      .filter(r => new Date(r.createdAt) >= oneMonthAgo)
-      .reduce((sum, r) => sum + r.price, 0);
+    const monthRevenue = allTransactions
+      .filter(t => new Date(t.transactionDate) >= oneMonthAgo)
+      .reduce((sum, t) => sum + t.amount, 0);
     
-    const yearRevenue = allPaidReservations
-      .filter(r => new Date(r.createdAt) >= oneYearAgo)
-      .reduce((sum, r) => sum + r.price, 0);
+    const yearRevenue = allTransactions
+      .filter(t => new Date(t.transactionDate) >= oneYearAgo)
+      .reduce((sum, t) => sum + t.amount, 0);
     
-    const totalRevenue = allPaidReservations.reduce((sum, r) => sum + r.price, 0);
+    const totalRevenue = allTransactions.reduce((sum, t) => sum + t.amount, 0);
 
     const totalReservations = await Reservation.countDocuments();
     const pendingReservations = await Reservation.countDocuments({ paymentStatus: 'pending' });
-    const paidReservations = allPaidReservations.length;
+    const paidReservations = await Reservation.countDocuments({ paymentStatus: 'paid' });
     const totalUsers = await User.countDocuments();
     const adminUsers = await User.countDocuments({ role: 'admin' });
 
