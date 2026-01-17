@@ -6,7 +6,7 @@ import {
   getAllRatings 
 } from "../controllers/rating.controller.js";
 import protect from "../middlewares/auth.middleware.js";
-import { adminRoute } from "../middlewares/admin.middleware.js";
+import { adminRoute } from "../middlewares/auth.middleware.js";
 
 const RatingRouter = express.Router();
 
