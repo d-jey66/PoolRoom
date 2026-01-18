@@ -73,7 +73,7 @@ export const handleWebhook = async (req, res) => {
           amount: reservation.price,
           tableNumber: reservation.tableNumber,
           tableType: reservation.tableType,
-          duration: reservation.duration,
+          duration: reservation.duration || Math.round((new Date(reservation.end) - new Date(reservation.start)) / (1000 * 60 * 60)),
           paymentMethod: 'online',
           status: 'completed',
           transactionDate: new Date()
