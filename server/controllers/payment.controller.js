@@ -41,25 +41,31 @@ export const createCheckoutSession = async (req, res, next) => {
 
 
 export const handleWebhook = async (req, res) => {
+  console.log('🔔 WEBHOOK RECEIVED');
   const sig = req.headers['stripe-signature'];
   let event;
   
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    console.log('✅ Webhook verified, event type:', event.type);
   } catch (err) {
+    console.log('❌ Webhook verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
   
   if (event.type === 'checkout.session.completed') {
+    console.log('💰 Payment completed!');
     const session = event.data.object;
     const reservationId = session.metadata.reservationId;
+    console.log('📝 Reservation ID:', reservationId);
       
     const reservation = await Reservation.findByIdAndUpdate(reservationId, {
       paymentStatus: 'paid'
     });
+    console.log('📋 Reservation found:', reservation ? 'YES' : 'NO');
       
     if (reservation) {
-      await Transaction.create({
+      const transaction = await Transaction.create({
         reservationId: reservation._id,
         userId: reservation.userId,
         userName: reservation.user,
@@ -71,7 +77,9 @@ export const handleWebhook = async (req, res) => {
         status: 'completed',
         transactionDate: new Date()
       });
+      console.log('💵 Transaction created:', transaction._id);
     }
   }
+  
   res.json({ received: true });
 };
