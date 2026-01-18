@@ -65,21 +65,25 @@ export const handleWebhook = async (req, res) => {
     console.log('📋 Reservation found:', reservation ? 'YES' : 'NO');
       
     if (reservation) {
-      const transaction = await Transaction.create({
-        reservationId: reservation._id,
-        userId: reservation.userId,
-        userName: reservation.user,
-        amount: reservation.price,
-        tableNumber: reservation.tableNumber,
-        tableType: reservation.tableType,
-        duration: reservation.duration,
-        paymentMethod: 'online',
-        status: 'completed',
-        transactionDate: new Date()
-      });
-      console.log('💵 Transaction created:', transaction._id);
+      try {
+        const transaction = await Transaction.create({
+          reservationId: reservation._id,
+          userId: reservation.userId,
+          userName: reservation.user,
+          amount: reservation.price,
+          tableNumber: reservation.tableNumber,
+          tableType: reservation.tableType,
+          duration: reservation.duration,
+          paymentMethod: 'online',
+          status: 'completed',
+          transactionDate: new Date()
+        });
+        console.log('💵 Transaction created:', transaction._id);
+      } catch (txError) {
+        console.error('❌ TRANSACTION CREATION FAILED:', txError);
+        console.error('Error details:', txError.message);
+      }
     }
   }
-  
   res.json({ received: true });
-};
+}
