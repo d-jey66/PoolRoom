@@ -166,7 +166,7 @@ export default function Home() {
       <section id="about" ref={aboutRef} className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Why Choose Pool Room?
             </h2>
             <p className="text-slate-400 text-lg max-w-2xl mx-auto">
