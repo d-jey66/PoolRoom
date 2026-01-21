@@ -30,12 +30,15 @@ export default function Payment() {
   };
 
   return (
-    <div className='m-10 bg-[#a100db]'>
-      <EmbeddedCheckoutProvider
-      stripe={stripePromise}
-      options={{ fetchClientSecret }}
-    >
-      <EmbeddedCheckout />
-    </EmbeddedCheckoutProvider></div>
+    <div className="min-h-screen bg-[#a100db] flex items-center justify-center p-8">
+      <div className="w-full max-w-2xl">
+        <EmbeddedCheckoutProvider
+          stripe={stripePromise}
+          options={{ fetchClientSecret }}
+        >
+          <EmbeddedCheckout />
+        </EmbeddedCheckoutProvider>
+      </div>
+    </div>
   );
 }
