@@ -30,7 +30,7 @@ export default function Payment() {
   };
 
   return (
-    <div className='m-10'>
+    <div className='m-10 bg-[#a100db]'>
       <EmbeddedCheckoutProvider
       stripe={stripePromise}
       options={{ fetchClientSecret }}
