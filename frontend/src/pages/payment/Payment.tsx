@@ -30,8 +30,8 @@ export default function Payment() {
   };
 
   return (
-    <div className="min-h-screen bg-[#a100db] flex flex-row items-center justify-center p-8">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-screen bg-[#a100db] flex flex-row items-center justify-center">
+      <div className="w-full max-w-2xl m-8">
         <EmbeddedCheckoutProvider
           stripe={stripePromise}
           options={{ fetchClientSecret }}
