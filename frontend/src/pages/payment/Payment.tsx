@@ -30,11 +30,12 @@ export default function Payment() {
   };
 
   return (
-    <EmbeddedCheckoutProvider
+    <div className='m-10'>
+      <EmbeddedCheckoutProvider
       stripe={stripePromise}
       options={{ fetchClientSecret }}
     >
       <EmbeddedCheckout />
-    </EmbeddedCheckoutProvider>
+    </EmbeddedCheckoutProvider></div>
   );
 }

@@ -422,11 +422,8 @@ export default function Reservations() {
                       </div>
                       <div className="text-slate-100 font-semibold">Pay Now Online</div>
                     </div>
-                    <div className="bg-green-900/40 text-green-400 px-2.5 py-1 rounded-full text-xs font-bold">
-                      -10%
-                    </div>
                   </div>
-                  <div className="text-xs text-slate-400 ml-7">Get instant 10% discount</div>
+                  <div className="text-xs text-slate-400 ml-7">Pay Now So You Don't Have To Worry About It Later</div>
                 </div>
 
                 <div 
