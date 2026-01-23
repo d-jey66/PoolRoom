@@ -104,22 +104,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         body: JSON.stringify(formData),
         credentials: "include",
       });
-
+  
       const result = await res.json();
-
+      console.log('LOGIN RESPONSE:', result); // ✅ ADD THIS
+  
       if (!res.ok) {
         throw new Error(result.message || "Something went wrong");
       }
-
-      setUser(result.user || result)
-
+  
+      setUser(result.user || result);
+      console.log('USER SET TO:', result.user || result); // ✅ ADD THIS
+  
       toast.update(toastId, {
         render: "Login successful ✅",
         type: "success",
         isLoading: false,
         autoClose: 2000,
       });
-
+  
       navigate("/panel");
     } catch (err: any) {
       toast.update(toastId, {
