@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         throw new Error(result.message || "Something went wrong");
       }
 
-      setUser(result);
+      setUser(result.user || result)
 
       toast.update(toastId, {
         render: "Login successful ✅",
