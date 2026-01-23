@@ -391,9 +391,6 @@ export default function Reservations() {
                   </div>
                   <div className="text-xs text-slate-500 mt-1">
                     for {formData.duration} hour(s)
-                    {formData.paymentMethod === 'online' && (
-                      <span className="text-green-400 ml-1">• 10% off!</span>
-                    )}
                   </div>
                 </div>
               </div>
