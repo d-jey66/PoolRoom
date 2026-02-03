@@ -12,6 +12,7 @@ import gsap from 'gsap';
 import { useAuth } from '../../context/AuthContext';
 import { reservationAPI, userAPI } from '../../lib/api';
 import type { Reservation } from '../../types/reservation';
+import CancelReservationModal from '@/components/modals/CancelReservationModal';
 
 export default function UserPanel() {
   const { user } = useAuth();
@@ -34,6 +35,9 @@ export default function UserPanel() {
     newPassword: '',
     confirmPassword: ''
   });
+  
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -129,22 +133,25 @@ export default function UserPanel() {
     }
   };
 
-  const handleCancelReservation = async (id: string | undefined) => {
-    if (!id) return;
+  const handleCancelReservation = async (reservation: Reservation) => {
+    setSelectedReservation(reservation);
+    setCancelModalOpen(true);
+  };
+  
+  const confirmCancelReservation = async () => {
+    if (!selectedReservation?._id) return;
     
-    if (!window.confirm('Are you sure you want to cancel this reservation? It will be deleted.')) {
-      return;
-    }
-
-    setDeletingId(id);
+    setDeletingId(selectedReservation._id);
     try {
-      await reservationAPI.deleteReservation(id);
-      setMessage({ type: 'success', text: 'Reservation cancelled and deleted successfully!' });
+      await reservationAPI.deleteReservation(selectedReservation._id);
+      setMessage({ type: 'success', text: 'Reservation cancelled successfully!' });
+      setCancelModalOpen(false);
       await fetchReservations();
     } catch (error: any) {
       setMessage({ type: 'error', text: error.message || 'Failed to cancel reservation' });
     } finally {
       setDeletingId(null);
+      setSelectedReservation(null);
     }
   };
 
@@ -482,14 +489,14 @@ export default function UserPanel() {
                     {/* Action Button */}
                     <div className="mt-4 pt-4 border-t border-slate-700">
                       <Button
-                        onClick={() => handleCancelReservation(reservation._id)}
+                        onClick={() => handleCancelReservation(reservation)}
                         disabled={deletingId === reservation._id || reservation.status === 'cancelled' || reservation.status === 'completed'}
                         variant="ghost"
                         size="sm"
                         className="w-full text-red-400 hover:text-red-300 hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <XCircle className="w-4 h-4 mr-2" />
-                        {deletingId === reservation._id ? 'Cancelling...' : 'Cancel Reservation'}
+                        Cancel Reservation
                       </Button>
                     </div>
                   </div>
@@ -499,6 +506,20 @@ export default function UserPanel() {
           </CardContent>
         </Card>
       </div>
+      {selectedReservation && (
+        <CancelReservationModal
+          open={cancelModalOpen}
+          onOpenChange={setCancelModalOpen}
+          onConfirm={confirmCancelReservation}
+          reservationDetails={{
+            user: selectedReservation.user,
+            tableNumber: selectedReservation.tableNumber,
+            date: formatDate(selectedReservation.start),
+            time: formatTime(selectedReservation.start)
+          }}
+          loading={deletingId === selectedReservation._id}
+        />
+      )}
     </div>
   );
 }
