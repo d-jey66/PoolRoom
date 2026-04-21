@@ -144,7 +144,6 @@ export default function Navbar() {
                     Sign Up
                   </Button>
                   </Link>
-                  <ThemeToggle />
               </>
             )}
           </div>
