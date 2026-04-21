@@ -207,7 +207,7 @@ export default function Reservations() {
         });
         window.location.href = `/payment/${response.reservation._id}/${price}`;
         return;
-      }
+      } 
       
       setMessage({ 
         type: 'success', 
@@ -242,237 +242,237 @@ export default function Reservations() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
-      <Card ref={cardRef} className="w-full max-w-2xl shadow-2xl border-slate-800 bg-slate-900/50 backdrop-blur">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Book a Table
-          </CardTitle>
-          <CardDescription className="text-center text-slate-400">
-            Reserve your spot with us
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent>
-          <div ref={formRef} className="space-y-5">
-            {/* Name Field - Full Width */}
-            <div className="form-field space-y-2">
-              <Label htmlFor="name" className="text-slate-300 flex items-center gap-2">
-                <User className="w-4 h-4" />
-                Name for Reservation
+  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+    <Card ref={cardRef} className="w-full max-w-2xl shadow-2xl border-slate-800 bg-slate-900/50 backdrop-blur">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Book a Table
+        </CardTitle>
+        <CardDescription className="text-center text-slate-400">
+          Reserve your spot with us
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent>
+        <div ref={formRef} className="space-y-5">
+          {/* Name Field - Full Width */}
+          <div className="form-field space-y-2">
+            <Label htmlFor="name" className="text-slate-300 flex items-center gap-2">
+              <User className="w-4 h-4" />
+              Name for Reservation
+            </Label>
+            <Input
+              id="name"
+              type="text"
+              value={formData.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+              placeholder="John Doe"
+              className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* Table Type & Table Number - 2 Columns */}
+          <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="tableType" className="text-slate-300 flex items-center gap-2">
+                <Hash className="w-4 h-4" />
+                Table Type
               </Label>
+              <Select value={formData.tableType} onValueChange={(value) => handleInputChange('tableType', value)}>
+                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  <SelectItem value="normal" className="text-slate-100">Normal (10 GEL)</SelectItem>
+                  <SelectItem value="coupe" className="text-slate-100">Coupe (15 GEL)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tableNumber" className="text-slate-300 flex items-center gap-2">
+                <Hash className="w-4 h-4" />
+                Table Number
+              </Label>
+              <Select 
+                value={formData.tableNumber} 
+                onValueChange={(value) => handleInputChange('tableNumber', value)}
+                disabled={!formData.tableType}
+              >
+                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                  <SelectValue placeholder={!formData.tableType ? "Select type first" : "Select table"} />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  {getAvailableTables().map(num => (
+                    <SelectItem key={num} value={num.toString()} className="text-slate-100">
+                      Table {num}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Date Fields - 2 Columns */}
+          <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="month" className="text-slate-300 flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                Month
+              </Label>
+              <Select value={formData.month} onValueChange={(value) => handleInputChange('month', value)}>
+                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                  <SelectValue placeholder="Select month" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  {months.map(month => (
+                    <SelectItem key={month.value} value={month.value} className="text-slate-100">
+                      {month.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="day" className="text-slate-300">Day</Label>
               <Input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                placeholder="John Doe"
+                id="day"
+                type="number"
+                value={formData.day}
+                onChange={(e) => handleInputChange('day', e.target.value)}
+                placeholder="DD"
+                min="1"
+                max="31"
                 className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-blue-500"
               />
             </div>
+          </div>
 
-            {/* Table Type & Table Number - 2 Columns */}
-            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="tableType" className="text-slate-300 flex items-center gap-2">
-                  <Hash className="w-4 h-4" />
-                  Table Type
-                </Label>
-                <Select value={formData.tableType} onValueChange={(value) => handleInputChange('tableType', value)}>
-                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-800 border-slate-700">
-                    <SelectItem value="normal" className="text-slate-100">Normal (10 GEL)</SelectItem>
-                    <SelectItem value="coupe" className="text-slate-100">Coupe (15 GEL)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="tableNumber" className="text-slate-300 flex items-center gap-2">
-                  <Hash className="w-4 h-4" />
-                  Table Number
-                </Label>
-                <Select 
-                  value={formData.tableNumber} 
-                  onValueChange={(value) => handleInputChange('tableNumber', value)}
-                  disabled={!formData.tableType}
-                >
-                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
-                    <SelectValue placeholder={!formData.tableType ? "Select type first" : "Select table"} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-800 border-slate-700">
-                    {getAvailableTables().map(num => (
-                      <SelectItem key={num} value={num.toString()} className="text-slate-100">
-                        Table {num}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          {/* Time & Duration - 2 Columns */}
+          <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="startTime" className="text-slate-300 flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                Start Time
+              </Label>
+              <Input
+                id="startTime"
+                type="time"
+                value={formData.startTime}
+                onChange={(e) => handleInputChange('startTime', e.target.value)}
+                className="bg-slate-800 border-slate-700 text-slate-100 focus:border-blue-500"
+              />
             </div>
 
-            {/* Date Fields - 2 Columns */}
-            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="month" className="text-slate-300 flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  Month
-                </Label>
-                <Select value={formData.month} onValueChange={(value) => handleInputChange('month', value)}>
-                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
-                    <SelectValue placeholder="Select month" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-800 border-slate-700">
-                    {months.map(month => (
-                      <SelectItem key={month.value} value={month.value} className="text-slate-100">
-                        {month.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="day" className="text-slate-300">Day</Label>
-                <Input
-                  id="day"
-                  type="number"
-                  value={formData.day}
-                  onChange={(e) => handleInputChange('day', e.target.value)}
-                  placeholder="DD"
-                  min="1"
-                  max="31"
-                  className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-blue-500"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="duration" className="text-slate-300">Duration</Label>
+              <Select value={formData.duration} onValueChange={(value) => handleInputChange('duration', value)}>
+                <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-800 border-slate-700">
+                  <SelectItem value="1" className="text-slate-100">1 Hour</SelectItem>
+                  <SelectItem value="2" className="text-slate-100">2 Hours</SelectItem>
+                  <SelectItem value="3" className="text-slate-100">3 Hours</SelectItem>
+                  <SelectItem value="4" className="text-slate-100">4 Hours</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+          </div>
 
-            {/* Time & Duration - 2 Columns */}
-            <div className="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="startTime" className="text-slate-300 flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  Start Time
-                </Label>
-                <Input
-                  id="startTime"
-                  type="time"
-                  value={formData.startTime}
-                  onChange={(e) => handleInputChange('startTime', e.target.value)}
-                  className="bg-slate-800 border-slate-700 text-slate-100 focus:border-blue-500"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="duration" className="text-slate-300">Duration</Label>
-                <Select value={formData.duration} onValueChange={(value) => handleInputChange('duration', value)}>
-                  <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-100 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-slate-800 border-slate-700">
-                    <SelectItem value="1" className="text-slate-100">1 Hour</SelectItem>
-                    <SelectItem value="2" className="text-slate-100">2 Hours</SelectItem>
-                    <SelectItem value="3" className="text-slate-100">3 Hours</SelectItem>
-                    <SelectItem value="4" className="text-slate-100">4 Hours</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Price Display */}
-            {formData.tableType && (
-              <div className="form-field">
-                <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center">
-                  <div className="text-xs text-slate-400 mb-1">Total Price</div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    {getPrice()} GEL
-                  </div>
-                  <div className="text-xs text-slate-500 mt-1">
-                    for {formData.duration} hour(s)
-                  </div>
+          {/* Price Display */}
+          {formData.tableType && (
+            <div className="form-field">
+              <div className="bg-slate-800 border border-slate-700 rounded-lg p-4 text-center">
+                <div className="text-xs text-slate-400 mb-1">Total Price</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  {getPrice()} GEL
+                </div>
+                <div className="text-xs text-slate-500 mt-1">
+                  for {formData.duration} hour(s)
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Payment Method */}
-            <div className="form-field space-y-3">
-              <Label className="text-slate-300 text-sm">Payment Method</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div 
-                  onClick={() => handleInputChange('paymentMethod', 'online')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    formData.paymentMethod === 'online' 
-                      ? 'border-green-500 bg-green-900/20' 
-                      : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        formData.paymentMethod === 'online' ? 'border-green-500' : 'border-slate-500'
-                      }`}>
-                        {formData.paymentMethod === 'online' && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
-                        )}
-                      </div>
-                      <div className="text-slate-100 font-semibold">Pay Now Online</div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-slate-400 ml-7">Pay Now So You Don't Have To Worry About It Later</div>
-                </div>
-
-                <div 
-                  onClick={() => handleInputChange('paymentMethod', 'at_venue')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    formData.paymentMethod === 'at_venue' 
-                      ? 'border-blue-500 bg-blue-900/20' 
-                      : 'border-slate-700 bg-slate-800 hover:border-slate-600'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 mb-2">
+          {/* Payment Method */}
+          <div className="form-field space-y-3">
+            <Label className="text-slate-300 text-sm">Payment Method</Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div 
+                onClick={() => handleInputChange('paymentMethod', 'online')}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  formData.paymentMethod === 'online' 
+                    ? 'border-green-500 bg-green-900/20' 
+                    : 'border-slate-700 bg-slate-800 hover:border-slate-600'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      formData.paymentMethod === 'at_venue' ? 'border-blue-500' : 'border-slate-500'
+                      formData.paymentMethod === 'online' ? 'border-green-500' : 'border-slate-500'
                     }`}>
-                      {formData.paymentMethod === 'at_venue' && (
-                        <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                      {formData.paymentMethod === 'online' && (
+                        <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
                       )}
                     </div>
-                    <div className="text-slate-100 font-semibold">Pay at Venue</div>
+                    <div className="text-slate-100 font-semibold">Pay Now Online</div>
                   </div>
-                  <div className="text-xs text-slate-400 ml-7">Pay when you arrive</div>
                 </div>
+                <div className="text-xs text-slate-400 ml-7">Pay Now So You Don't Have To Worry About It Later</div>
+              </div>
+
+              <div 
+                onClick={() => handleInputChange('paymentMethod', 'at_venue')}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  formData.paymentMethod === 'at_venue' 
+                    ? 'border-blue-500 bg-blue-900/20' 
+                    : 'border-slate-700 bg-slate-800 hover:border-slate-600'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    formData.paymentMethod === 'at_venue' ? 'border-blue-500' : 'border-slate-500'
+                  }`}>
+                    {formData.paymentMethod === 'at_venue' && (
+                      <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                    )}
+                  </div>
+                  <div className="text-slate-100 font-semibold">Pay at Venue</div>
+                </div>
+                <div className="text-xs text-slate-400 ml-7">Pay when you arrive</div>
               </div>
             </div>
-
-            {/* Alert Message */}
-            {message.text && (
-              <div ref={alertRef}>
-                <Alert variant={message.type === 'error' ? 'destructive' : 'default'} 
-                       className={message.type === 'success' ? 'bg-green-900/20 border-green-700 text-green-400' : ''}>
-                  {message.type === 'success' ? (
-                    <CheckCircle2 className="h-4 w-4" />
-                  ) : (
-                    <AlertCircle className="h-4 w-4" />
-                  )}
-                  <AlertDescription>{message.text}</AlertDescription>
-                </Alert>
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <Button
-              type="button"
-              onClick={handleSubmit}
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 py-6 text-lg"
-            >
-              {loading ? 'Creating Reservation...' : 'Book Reservation'}
-            </Button>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+
+          {/* Alert Message */}
+          {message.text && (
+            <div ref={alertRef}>
+              <Alert variant={message.type === 'error' ? 'destructive' : 'default'} 
+                     className={message.type === 'success' ? 'bg-green-900/20 border-green-700 text-green-400' : ''}>
+                {message.type === 'success' ? (
+                  <CheckCircle2 className="h-4 w-4" />
+                ) : (
+                  <AlertCircle className="h-4 w-4" />
+                )}
+                <AlertDescription>{message.text}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <Button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 py-6 text-lg"
+          >
+            {loading ? 'Creating Reservation...' : 'Book Reservation'}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
   );
 }

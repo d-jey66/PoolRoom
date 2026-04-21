@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "app",
+    "slug": "poolroom",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.iz4nami.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "326d271b-5e4a-4beb-b53e-70ffaf3b9fc5"
+      }
+    },
+    "owner": "iz4nami",
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ]
+  }
+}

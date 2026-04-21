@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import rateLimiter from 'express-rate-limit';
 import helmet from 'helmet';
+
+dotenv.config();
+
 import authRouter from './routers/auth.router.js';
 import globalErrorHandler from './controllers/error.controller.js';
 import reservationRouter from './routers/reservation.router.js';
@@ -14,8 +17,6 @@ import PaymentRouter from "./routers/payment.router.js";
 import { handleWebhook } from './controllers/payment.controller.js';
 import RatingRouter from './routers/rating.router.js';
 import AdminRouter from './routers/admin.router.js';
-
-dotenv.config();
 
 const app = express();
 
@@ -30,7 +31,7 @@ setInterval(updateReservationStatuses, 60000);
 
 app.use(rateLimiter({
     windowMs: 15 * 60 * 1000,
-    max: 100
+    max: 10000
 }));
 app.use(helmet());
 
@@ -40,7 +41,7 @@ app.use("/api/payments", PaymentRouter);
 
 app.use(express.json());
 
-app.get('/api/status', (req, res) => {
+app.get('/api/status', (_, res) => {
     res.json({ status: 'Server is running' });
 });
 
@@ -56,7 +57,7 @@ mongoose.connect(process.env.DB)
     .then(() => {
         updateReservationStatuses();
         console.log('Connected to MongoDB');
-        app.listen(3000, () => {
+        app.listen(3000,  () => {
             console.log('Server is running on port 3000');
         });
     })

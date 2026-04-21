@@ -2,9 +2,8 @@ import Stripe from "stripe";
 import Reservation from "../models/reservation.model.js";
 import Transaction from "../models/transaction.model.js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export const createCheckoutSession = async (req, res, next) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   try {
     const { reservationId, price} = req.body;
 

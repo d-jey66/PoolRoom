@@ -12,4 +12,4 @@ reservationRouter.get('/my-reservations', protect, getMyReservations);
 reservationRouter.put('/update/:id', protect, updateReservationStatus); 
 reservationRouter.delete('/delete/:id', protect, deleteReservation);
 
-export default reservationRouter;
+export default reservationRouter; 

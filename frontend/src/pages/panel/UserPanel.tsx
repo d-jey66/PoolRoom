@@ -77,7 +77,7 @@ export default function UserPanel() {
         if (!a.start || !b.start) return 0;
         return new Date(b.start).getTime() - new Date(a.start).getTime();
       });
-
+ 
       setReservations(data);
     } catch (err: any) {
       setMessage({ type: 'error', text: 'Failed to load reservations' });
@@ -164,7 +164,7 @@ export default function UserPanel() {
     const weekday = date.toLocaleString('en-US', { weekday: 'short', timeZone: 'UTC' });
     return `${weekday}, ${month} ${day}, ${year}`;
   };
-
+//  7-
   const formatTime = (dateString: string | Date | undefined) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);

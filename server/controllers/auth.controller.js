@@ -21,8 +21,12 @@ const createSendToken = (user, res, redirect = false) => {
         return res.redirect(`${process.env.CLIENT_URL}/panel`);
     }
 
+    console.log(token);
+
+  
     return res.status(200).json({
-        status: 'success',
+      status: 'success',
+      token,
         user
     });
 };
@@ -34,7 +38,6 @@ const signup = catchAsync(async (req, res, next) => {
     const code = newUser.createEmailVerificationToken();
     await newUser.save({ validateBeforeSave: false });
     const verificationUrl = `${req.protocol}://${req.get("host")}/api/auth/verify/${code}`;
-    
     const html = `
         <!DOCTYPE html>
         <html>
@@ -153,17 +156,21 @@ const signup = catchAsync(async (req, res, next) => {
     `;
   
     console.log('VERIFY EMAIL: about to send email to', newUser.email);
-
+    
     try {
         await sendEmail({
             to: newUser.email,
             subject: '🎱 Verify Your Email - Pool Room',
             html
         });
+      
+      createSendToken(newUser, res);
+      
         res.status(201).json({
             status: 'success',
             message: 'User created! Check your email to verify your account.'
         });
+      
     } catch (error) {
         newUser.verificationCode = undefined;
         await newUser.save({ validateBeforeSave: false });
@@ -213,4 +220,14 @@ const logout = catchAsync(async (req, res) => {
     res.status(200).json({ status: 'success' });
 });
 
-export { signup, verify, login, logout };
+const autoLogin = (req, res) => { 
+  try {
+    res.status(200).json({ user: req.user})
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({message: "internal server error"})
+  }
+}
+
+export { signup, verify, login, logout, autoLogin };
+

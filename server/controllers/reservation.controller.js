@@ -258,6 +258,8 @@ export const completeReservation = async (req, res) => {
 
 export const deleteReservation = async (req, res) => {
   try {
+    console.log('about to delete reservation');
+
     const deleted = await Reservation.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
@@ -265,6 +267,8 @@ export const deleteReservation = async (req, res) => {
     }
 
     res.json({ message: "Reservation deleted successfully" });
+    console.log('reservation deleted successfully');
+
   } catch (error) {
     res.status(500).json({
       message: "Failed to delete reservation",

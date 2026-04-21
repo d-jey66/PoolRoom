@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface UserData {
   _id: string;
-  username: string;
+  fullname: string;
   email: string;
   role: 'admin' | 'user';
   reservationCount?: number;
@@ -201,7 +201,7 @@ export default function AdminUsers() {
                           )}
                         </div>
                         <div>
-                          <p className="text-slate-100 font-medium">{user.username}</p>
+                          <p className="text-slate-100 font-medium">{user.fullname}</p>
                           <p className="text-slate-500 text-xs">ID: {user._id.slice(-6)}</p>
                         </div>
                       </div>

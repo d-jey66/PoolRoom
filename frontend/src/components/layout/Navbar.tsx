@@ -4,6 +4,7 @@ import { Home, LogIn, UserPlus, LogOut, Menu, X, LayoutDashboard } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { useAuth } from '../../context/AuthContext';
 import gsap from 'gsap';
+import ThemeToggle from './ThemeToggle'
 
 
 const Logo = '/LogoTab.png'
@@ -106,7 +107,9 @@ export default function Navbar() {
                     {user.role === 'admin' ? 'Admin Panel' : 'My Profile'}
                   </Button>
                 </Link>
-
+                
+                <ThemeToggle />
+                
                 <div className="nav-item flex items-center gap-3 ml-4 pl-4 border-l border-slate-700">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold">
@@ -137,13 +140,14 @@ export default function Navbar() {
                     <LogIn className="w-4 h-4" />
                     Login
                   </Button>
-                </Link>
+                  </Link>
                 <Link to="/signup" className="nav-item">
                   <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white flex items-center gap-2 shadow-lg hover:shadow-purple-500/50 transition-all duration-200">
                     <UserPlus className="w-4 h-4" />
                     Sign Up
                   </Button>
-                </Link>
+                  </Link>
+                  <ThemeToggle />
               </>
             )}
           </div>
